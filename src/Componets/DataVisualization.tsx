@@ -132,7 +132,7 @@ const DataVisualization: React.FC = () => {
         scrollBehavior: "smooth",
         scrollbarWidth: "none", //if you want to add scroll bar remove this line only
         msOverflowStyle: "none",
-        height: "calc(100vh - 130px)",
+        height: "100dvh",
       }}
     >
       <div className='p-4'>
