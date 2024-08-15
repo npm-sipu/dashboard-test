@@ -56,7 +56,7 @@ const LoginForm: React.FC = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className='flex flex-col  gap-6 items-center py-6'
+      className='flex flex-col  gap-4 items-center py-4'
     >
       <EmailInput
         email={email}
@@ -68,10 +68,10 @@ const LoginForm: React.FC = () => {
         onPasswordChange={handlePasswordChange}
         error={passwordError}
       />
-      <div className='flex flex-col items-center gap-4 w-full'>
+      <div className='flex flex-col items-center gap-2 w-full'>
         <button
           type='submit'
-          className='bg-[rgb(35,16,97)] w-full text-white py-3.5 rounded-3xl font-medium'
+          className='bg-[rgb(35,16,97)] hover:bg-[rgb(70,40,168)] w-full text-white py-3.5 rounded-3xl font-medium'
         >
           Login
         </button>
@@ -80,8 +80,9 @@ const LoginForm: React.FC = () => {
 
         <button
           type='button'
-          className='bg-white] w-full text-black border-[1px] py-3.5 rounded-3xl font-medium'
+          className='bg-white] w-full text-black border-2 hover:bg-slate-100 flex justify-center gap-2 items-center py-3.5 rounded-3xl font-medium'
         >
+          <img src='/Glogo.svg' className='h-[20px] w-[20px] rounded-full' />
           Sign in with Google
         </button>
       </div>
