@@ -2,10 +2,14 @@
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Dialer from "@/Componets/Ui/Dialer";
+import { ContactCard } from "@/utils/helper";
 
 import { FaPhoneAlt } from "react-icons/fa";
+interface userProps {
+  cardsData: ContactCard[];
+}
 
-export function DialerModal() {
+export function DialerModal({ cardsData }: userProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -14,7 +18,7 @@ export function DialerModal() {
         </div>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[380px]'>
-        <Dialer />
+        <Dialer contacts={cardsData} />
       </DialogContent>
     </Dialog>
   );

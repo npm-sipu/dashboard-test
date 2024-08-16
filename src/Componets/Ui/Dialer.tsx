@@ -234,11 +234,13 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPhone, FaBackspace, FaVideo } from "react-icons/fa";
 import { PiPhoneSlashFill } from "react-icons/pi";
 import PostCallButtons from "./PostCallButtons";
-import { dialerButtons } from "@/utils/helper";
+import { ContactCard, dialerButtons, formatDuration } from "@/utils/helper";
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
+import { RxAvatar } from "react-icons/rx";
 
 type Contact = {
   name: string;
@@ -246,15 +248,15 @@ type Contact = {
   type: string;
 };
 
-const contacts: Contact[] = [
-  { name: "John Doe", number: "354768", type: "Home" },
-  { name: "John Doe", number: "354768", type: "Business" },
-  { name: "John Doe", number: "354768", type: "Mobile" },
-];
+interface userProps {
+  contacts: ContactCard[];
+}
 
-export const Dialer: React.FC = () => {
+export const Dialer: React.FC<userProps> = ({ contacts }) => {
   const [input, setInput] = useState("");
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [callDuration, setCallDuration] = useState(0);
+  const [callInProgress, setCallInProgress] = useState(false);
 
   const handleButtonClick = (value: string) => {
     setInput((prev) => prev + value);
@@ -271,6 +273,8 @@ export const Dialer: React.FC = () => {
 
   const handleCall = (contact: Contact) => {
     setSelectedContact(contact);
+    setCallInProgress(true);
+    setCallDuration(0);
   };
 
   const matchedContacts = contacts.filter((contact) =>
@@ -285,6 +289,22 @@ export const Dialer: React.FC = () => {
       setInput((prev) => prev + key);
     }
   };
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+
+    if (callInProgress) {
+      timer = setInterval(() => {
+        setCallDuration((prev) => prev + 1);
+      }, 1000);
+    } else if (timer) {
+      clearInterval(timer);
+    }
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [callInProgress]);
 
   return (
     <div
@@ -309,13 +329,13 @@ export const Dialer: React.FC = () => {
                 <div
                   key={index}
                   onClick={() => handleCall(contact)}
-                  className='p-2 rounded-lg cursor-pointer mb-2 flex items-center'
+                  className='p-2 rounded-lg cursor-pointer mb-2 mx-2 flex items-center'
                 >
-                  <img
-                    src={"https://via.placeholder.com/20"}
-                    alt={contact.name}
-                    className='w-5 h-5 rounded-full mr-3'
-                  />
+                  <Avatar className='h-10 cursor-pointer w-10'>
+                    <AvatarFallback>
+                      <RxAvatar className='text-2xl text-gray-500' />
+                    </AvatarFallback>
+                  </Avatar>
                   <div>
                     <p className='text-white'>
                       {contact.name}{" "}
@@ -337,6 +357,11 @@ export const Dialer: React.FC = () => {
           <h1 className='text-xl'>{selectedContact?.name}</h1>
           <p>{selectedContact?.number}</p>
           <p>{selectedContact?.type}</p>
+          {callInProgress && (
+            <p className='text-green-500 text-lg mt-4'>
+              Call duration: {formatDuration(callDuration)}
+            </p>
+          )}
         </div>
       )}
 
